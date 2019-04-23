@@ -8,81 +8,71 @@ namespace GraduationTracker.Tests.Unit
     [TestClass]
     public class GraduationTrackerTests
     {
-        [TestMethod]
-        public void TestHasCredits()
+        /// Using strongly typed to do more stable code at compile time.
+
+        private Diploma _diploma;
+        private Student[] _students;
+        private GraduationTracker _graduationTracker;
+
+        public GraduationTrackerTests()
+        { 
+            ReadData();
+            _graduationTracker = new GraduationTracker();
+        }
+
+        /// <summary>
+        /// Get datas from repository.
+        /// </summary>
+        private void ReadData()
         {
-            var tracker = new GraduationTracker();
-
-            var diploma = new Diploma
-            {
-                Id = 1,
-                Credits = 4,
-                Requirements = new int[] { 100, 102, 103, 104 }
-            };
-
-            var students = new[]
-            {
-               new Student
-               {
-                   Id = 1,
-                   Courses = new Course[]
-                   {
-                        new Course{Id = 1, Name = "Math", Mark=95 },
-                        new Course{Id = 2, Name = "Science", Mark=95 },
-                        new Course{Id = 3, Name = "Literature", Mark=95 },
-                        new Course{Id = 4, Name = "Physichal Education", Mark=95 }
-                   }
-               },
-               new Student
-               {
-                   Id = 2,
-                   Courses = new Course[]
-                   {
-                        new Course{Id = 1, Name = "Math", Mark=80 },
-                        new Course{Id = 2, Name = "Science", Mark=80 },
-                        new Course{Id = 3, Name = "Literature", Mark=80 },
-                        new Course{Id = 4, Name = "Physichal Education", Mark=80 }
-                   }
-               },
-            new Student
-            {
-                Id = 3,
-                Courses = new Course[]
-                {
-                    new Course{Id = 1, Name = "Math", Mark=50 },
-                    new Course{Id = 2, Name = "Science", Mark=50 },
-                    new Course{Id = 3, Name = "Literature", Mark=50 },
-                    new Course{Id = 4, Name = "Physichal Education", Mark=50 }
-                }
-            },
-            new Student
-            {
-                Id = 4,
-                Courses = new Course[]
-                {
-                    new Course{Id = 1, Name = "Math", Mark=40 },
-                    new Course{Id = 2, Name = "Science", Mark=40 },
-                    new Course{Id = 3, Name = "Literature", Mark=40 },
-                    new Course{Id = 4, Name = "Physichal Education", Mark=40 }
-                }
-            }
-
-
-            //tracker.HasGraduated()
-        };
-            
-            var graduated = new List<Tuple<bool, STANDING>>();
-
-            foreach(var student in students)
-            {
-                graduated.Add(tracker.HasGraduated(diploma, student));      
-            }
-
-            
-            Assert.IsFalse(graduated.Any());
+            _diploma = Repository.GetDiploma(1);
+            _students = Repository.GetStudents();
 
         }
 
+        private List<Tuple<bool, STANDING>> GraduateList()
+        {
+            var graduated = new List<Tuple<bool, STANDING>>();
 
+            foreach (var student in _students)
+            {
+                graduated.Add(_graduationTracker.HasGraduated(_diploma, student));
+            }
+
+            return graduated;
+        }
+
+        [TestMethod]
+        public void TestHasCredits()
+        {
+            var graduated = GraduateList();
+
+            /// True if any data get without knowing graduate or not.
+            Assert.IsTrue(graduated.Any());
+        }
+
+        /// <summary>
+        /// Has Any Student Graduate
+        /// </summary>
+        [TestMethod]
+        public void TestHasAnyStudentGraduate()
+        {
+            var graduated = GraduateList();
+
+            /// True if graduate data found in response with true value
+            Assert.IsTrue(graduated.Any(response => response.Item1 == true));
+        }
+
+        /// <summary>
+        /// Has Any Student Under Graduate
+        /// </summary>
+        [TestMethod]
+        public void TestHasAnyStudentUnderGraduate()
+        {
+            var graduated = GraduateList();
+
+            /// True if graduate data found in response with false value
+            Assert.IsTrue(graduated.Any(response => response.Item1 == false));
+        }
     }
 }

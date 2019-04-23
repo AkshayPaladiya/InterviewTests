@@ -10,52 +10,30 @@ namespace GraduationTracker
     {
         public static Student GetStudent(int id)
         {
-            var students = GetStudents();
-            Student student = null;
-
-            for (int i = 0; i < students.Length; i++)
-            {
-                if (id == students[i].Id)
-                {
-                    student = students[i];
-                }
-            }
-            return student;
+            /// Remove extra codes
+            
+            return GetStudents().FirstOrDefault(s => s.Id == id);
         }
 
         public static Diploma GetDiploma(int id)
         {
-            var diplomas = GetDiplomas();
-            Diploma diploma = null;
+            /// Remove extra codes
 
-            for (int i = 0; i < diplomas.Length; i++)
-            {
-                if (id == diplomas[i].Id)
-                {
-                    diploma = diplomas[i];
-                }
-            }
-            return diploma;
-
+            return GetDiplomas().FirstOrDefault(d => d.Id == id);
         }
 
         public static Requirement GetRequirement(int id)
         {
-            var requirements = GetRequirements();
-            Requirement requirement = null;
+            /// Remove extra codes
 
-            for (int i = 0; i < requirements.Length; i++)
-            {
-                if (id == requirements[i].Id)
-                {
-                    requirement = requirements[i];
-                }
-            }
-            return requirement;
+            return GetRequirements().FirstOrDefault(r => r.Id == id);
         }
 
-
-        private static Diploma[] GetDiplomas()
+        /// <summary>
+        /// Get Diplomas data
+        /// </summary>
+        /// <returns></returns>
+        public static Diploma[] GetDiplomas()
         {
             return new[]
             {
@@ -68,6 +46,10 @@ namespace GraduationTracker
             };
         }
 
+        /// <summary>
+        /// Get Requirements
+        /// </summary>
+        /// <returns></returns>
         public static Requirement[] GetRequirements()
         {   
                 return new[]
@@ -78,7 +60,12 @@ namespace GraduationTracker
                     new Requirement{Id = 104, Name = "Physichal Education", MinimumMark=50, Courses = new int[]{4}, Credits=1 }
                 };
         }
-        private static Student[] GetStudents()
+
+        /// <summary>
+        /// Get Students data
+        /// </summary>
+        /// <returns></returns>
+        public static Student[] GetStudents()
         {
             return new[]
             {
